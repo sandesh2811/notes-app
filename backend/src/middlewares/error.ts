@@ -19,7 +19,6 @@ export const errorMiddleware: ErrorRequestHandler = (
     res.status(err.statusCode).json({
       success: err.success,
       message: err.message,
-      details: err.extraDetails || null,
     });
     return;
   }

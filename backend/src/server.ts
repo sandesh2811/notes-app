@@ -8,6 +8,7 @@ import cors from "cors";
 
 import { connectDB } from "./db/dbConnect";
 import { errorMiddleware } from "./middlewares/error";
+import notesRouter from "./routes/notes.route";
 
 const app = express();
 
@@ -22,12 +23,16 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 /* Routes */
 
-/* Health check route */
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Welcome!" });
 });
+
+app.use("/notes", notesRouter);
 
 /* Error middleware */
 app.use(errorMiddleware);
