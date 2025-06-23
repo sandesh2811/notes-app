@@ -1,5 +1,7 @@
+import HomePage from "./HomePage";
+
 function App() {
-  return <h1>Simple full-stack notes app</h1>;
+  return <HomePage />;
 }
 
 export default App;
