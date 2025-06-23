@@ -21,16 +21,14 @@ export const GetNotes: RequestHandler = async (
   try {
     /* Get the notes from the database */
 
-    setTimeout(async () => {
-      const notes = await getNotesService();
-      ApiResponse({
-        response,
-        statusCode: OK,
-        success: true,
-        message: "All notes!",
-        data: notes,
-      });
-    }, 5000);
+    const notes = await getNotesService();
+    ApiResponse({
+      response,
+      statusCode: OK,
+      success: true,
+      message: "All notes!",
+      data: notes,
+    });
   } catch (error) {
     next(error);
   }
