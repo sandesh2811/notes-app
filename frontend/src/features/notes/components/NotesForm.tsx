@@ -1,18 +1,48 @@
-import { useState } from "react";
+import { createNote } from "../api/createNote";
 
-type NotesFormValues = {
+import { useNoteContext } from "../context/notesContext";
+
+import toast from "react-hot-toast";
+import { useState, type FormEvent } from "react";
+
+export type NotesFormValues = {
   title: string;
   description: string;
 };
 
 const NotesForm = () => {
-  const [formValues, setFormValues] = useState<NotesFormValues>({
-    title: "",
-    description: "",
-  });
+  /* Get notes from context */
+  const { notes, setNotes } = useNoteContext();
+
+  const initialState = { title: "", description: "" };
+  const [formValues, setFormValues] = useState<NotesFormValues>(initialState);
+
+  /* Handle note creation */
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    /* Api call */
+    const { success, message, data } = await createNote(formValues);
+
+    if (success) {
+      toast.success(message);
+
+      /* Update the existing notes */
+      setNotes([...notes, data]);
+
+      /* Reset the form values */
+      setFormValues(initialState);
+    } else {
+      toast.error(message);
+    }
+  };
 
   return (
-    <form className="flex flex-col gap-4">
+    <form
+      action="#"
+      onSubmit={handleFormSubmit}
+      className="flex flex-col gap-4"
+    >
       <div className="flex flex-col gap-2">
         <label htmlFor="note-title" className="md:text-lg font-medium">
           Title
@@ -48,7 +78,7 @@ const NotesForm = () => {
         />
       </div>
 
-      <button className="w-full bg-[#282828] text-white p-3 rounded-sm font-medium">
+      <button className="w-full bg-[#282828] text-white p-3 rounded-sm font-medium cursor-pointer">
         Create
       </button>
     </form>

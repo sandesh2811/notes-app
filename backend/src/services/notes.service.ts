@@ -1,9 +1,9 @@
 import { BAD_REQUEST, NOT_FOUND } from "../constants/constants";
+
 import {
   createNote,
   deleteNote,
   getNotes,
-  updateNote,
 } from "../repositories/notes.repository";
 
 import { AppError } from "../utils/AppError";
@@ -49,7 +49,7 @@ type CreateNoteServiceArgs = {
 export const createNoteService = async ({
   title,
   description,
-}: CreateNoteServiceArgs): Promise<void> => {
+}: CreateNoteServiceArgs) => {
   /* Check if title and description is available or not */
   if (!title || !description)
     throw new AppError(false, "Missing fields!", BAD_REQUEST, true);
@@ -62,50 +62,8 @@ export const createNoteService = async ({
 
   if (!createdNote)
     throw new AppError(false, "Couldn't create note!", BAD_REQUEST, true);
-};
 
-/* Update Note */
-
-/*
-  Get the id, title and description if available
-  If id is not available then throw respective error
-
-  If title and description are available then it means they are updated 
-  Call the database for updating the note
-
-  If update is not successful then throw respective error
-  Else return updated note
-*/
-
-type UpdateNoteServiceArgs = {
-  id: string;
-  title?: string;
-  description?: string;
-};
-
-export const updateNoteService = async ({
-  id,
-  title,
-  description,
-}: UpdateNoteServiceArgs) => {
-  /* Check if note id exists */
-  if (!id) throw new AppError(false, "Invalid note id!", BAD_REQUEST, true);
-
-  const updatedFields: Omit<UpdateNoteServiceArgs, "id"> = {};
-
-  /* If title exists then set title in updated fields */
-  if (title) updatedFields.title = title;
-
-  /* If description exists then set description in updated fields */
-  if (description) updatedFields.description = description;
-
-  const updatedNote = await updateNote({ id, updatedFields });
-
-  if (!updatedNote) {
-    throw new AppError(false, "Couldn't update note!", BAD_REQUEST, true);
-  }
-
-  return updatedNote;
+  return createdNote;
 };
 
 /* Delete Note */

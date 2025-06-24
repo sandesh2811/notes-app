@@ -4,7 +4,6 @@ import {
   createNoteService,
   deleteNoteService,
   getNotesService,
-  updateNoteService,
 } from "../services/notes.service";
 
 import { ApiResponse } from "../utils/ApiResponse";
@@ -46,42 +45,18 @@ export const CreateNote: RequestHandler<
     const { title, description } = request.body;
 
     /* Create note in the database */
-    await createNoteService({ title, description });
+    const createdNote = await createNoteService({ title, description });
 
     ApiResponse({
       response,
       statusCode: CREATED,
       success: true,
       message: "Note created successfully!",
+      data: createdNote,
     });
   } catch (error) {
     next(error);
   }
-};
-
-/* Update Note */
-
-export const UpdateNote: RequestHandler<
-  { id: string },
-  {},
-  { title?: string; description?: string }
-> = async (request, response): Promise<void> => {
-  /* Get the note id from params */
-  const { id } = request.params;
-
-  /* Get the title and description if available from request body */
-  const { title, description } = request.body;
-
-  /* Update note in database */
-  const updatedNote = await updateNoteService({ id, title, description });
-
-  ApiResponse({
-    response,
-    statusCode: OK,
-    success: true,
-    message: "Note updated successfully!",
-    data: updatedNote,
-  });
 };
 
 /* Delete note */

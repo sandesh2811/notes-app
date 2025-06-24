@@ -27,26 +27,6 @@ export const createNote = async ({
   return createdNote;
 };
 
-/* Update Note */
-
-type UpdateNoteArgs = {
-  id: string;
-  updatedFields: {
-    title?: string;
-    description?: string;
-  };
-};
-
-export const updateNote = async ({ id, updatedFields }: UpdateNoteArgs) => {
-  const updatedNote = await NoteModel.findByIdAndUpdate(
-    { _id: id },
-    { $set: updatedFields },
-    { $new: true }
-  );
-
-  return updatedNote;
-};
-
 /* Delete Note */
 
 export const deleteNote = async (id: string) => {
