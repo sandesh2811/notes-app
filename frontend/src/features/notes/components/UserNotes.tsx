@@ -14,19 +14,22 @@ const UserNotes = () => {
   const { isLoading, errorMessage, notes, setNotes } = useNoteContext();
 
   /* Delete a note */
-  const handleNoteDelete = useCallback(async (noteId: string) => {
-    /* Remove note from local state */
-    setNotes(notes.filter((note) => note._id !== noteId));
+  const handleNoteDelete = useCallback(
+    async (noteId: string) => {
+      /* Remove note from local state */
+      setNotes(notes.filter((note) => note._id !== noteId));
 
-    /* Api call */
-    const { success, message } = await deleteNote(noteId);
+      /* Api call */
+      const { success, message } = await deleteNote(noteId);
 
-    if (success) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  }, []);
+      if (success) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
+    },
+    [notes]
+  );
 
   /* Handle loading state */
   if (isLoading)
